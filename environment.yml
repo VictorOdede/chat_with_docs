@@ -74,7 +74,7 @@ dependencies:
       - win32-setctime==1.1.0
       - yarl==1.9.2
 variables:
-  huggingface_key: "'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'"
-  openai_key: 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
-  pinecone_key: 06a6327f-db0a-4d80-8885-2810db688929
+  huggingface_key: HF_KEY
+  openai_key: OPENAI_KEY
+  pinecone_key: PINECONE_KEY
 prefix: c:\Users\admin\Desktop\Software\chat_docs\.conda
