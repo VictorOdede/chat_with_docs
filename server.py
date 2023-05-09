@@ -35,4 +35,12 @@ def chat_gpt():
 @app.route("/chat/test", methods=["POST"])
 def start_conv():
     data = request.json
-    return jsonify({"data": "Request received"})
+    print(data["question"])
+    query = data["question"]
+
+    vectorstore = Pinecone.from_existing_index(index_name, embeddings)
+    docs = vectorstore.similarity_search(query, include_metadata=True)
+    llm = OpenAI(temperature=0.0, openai_api_key=os.environ.get("openai_key"))
+    chain = load_qa_chain(llm, chain_type="stuff")
+    res = chain.run(input_documents=docs, question=query)
+    return {"response": res}
