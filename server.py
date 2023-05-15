@@ -27,32 +27,29 @@ def hello_world():
 
 @app.route("/upload", methods=["POST"])
 @cross_origin()
-def parse_file():
+def upload_file():
     # Extract text from pdf/word/google-doc files
-    print(request.files)
 
     if "document" not in request.files:
         return "No file uploaded", 400
 
-    # Remember to name the file as 'file' in frontend
     file = request.files["document"]
     file_name = secure_filename(file.filename)
     file_ext = file_name.split(".")[-1].lower()
     print(file_name)
-    print(file_ext)
     text = ""
 
-    # if request.files["type"] != "pdf":
-    #     pdf_reader = PyPDF2.PdfFileReader(io.BytesIO(file.read()))
-    #     for page_num in range(pdf_reader.getNumPages()):
-    #         text += pdf_reader.getPage(page_num).extractText()
-    # elif request.files["type"] in ["doc", "docx"]:
-    #     doc = docx.Document(io.BytesIO(file.read()))
-    #     text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
-    # else:
-    #     return "Only PDF, Word and Google Doc files are allowed", 400
+    if file_ext == "pdf":
+        pdf_reader = PyPDF2.PdfFileReader(io.BytesIO(file.read()))
+        for page_num in range(pdf_reader.getNumPages()):
+            text += pdf_reader.getPage(page_num).extractText()
+    elif request.files["type"] in ["doc", "docx"]:
+        doc = docx.Document(io.BytesIO(file.read()))
+        text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
+    else:
+        return "Only PDF, Word and Google Doc files are allowed", 400
 
-    # print(text)
+    print(text)
 
     # Create new Pinecone index
     # Store embeddings in Pinecone
