@@ -42,7 +42,6 @@ def fetch_page(url):
         if text:
             text = re.sub(r"[\n]", " ", text)
             text_list.append(text)
-    # print(text_list)
 
     # split text into chunks that can be embedded and indexed
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
